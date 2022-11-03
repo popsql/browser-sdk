@@ -9,9 +9,10 @@ import type {
 import type { RumSessionManager } from '../rumSessionManager'
 
 export interface Tracer {
+  traceCustom: (context: Partial<RumFetchStartContext>) => void
   traceFetch: (context: Partial<RumFetchStartContext>) => void
   traceXhr: (context: Partial<RumXhrStartContext>, xhr: XMLHttpRequest) => void
-  clearTracingIfNeeded: (context: RumFetchCompleteContext | RumXhrCompleteContext) => void
+  clearTracingIfNeeded: (context: RumFetchCompleteContext | RumXhrCompleteContext | ) => void
 }
 
 interface TracingHeaders {
@@ -46,6 +47,11 @@ export function clearTracingIfNeeded(context: RumFetchCompleteContext | RumXhrCo
 export function startTracer(configuration: RumConfiguration, sessionManager: RumSessionManager): Tracer {
   return {
     clearTracingIfNeeded,
+    traceCustom: (context) =>
+      injectHeadersIfTracingAllowed(configuration, context, sessionManager, (tracingHeaders: TracingHeaders) => {
+        tracingHeaders
+        // add stuff
+      }),
     traceFetch: (context) =>
       injectHeadersIfTracingAllowed(configuration, context, sessionManager, (tracingHeaders: TracingHeaders) => {
         if (context.input instanceof Request && !context.init?.headers) {

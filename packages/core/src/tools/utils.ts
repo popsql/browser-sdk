@@ -58,6 +58,7 @@ export const enum ResourceType {
 export const enum RequestType {
   FETCH = ResourceType.FETCH,
   XHR = ResourceType.XHR,
+  OTHER = ResourceType.OTHER,
 }
 
 // use lodash API

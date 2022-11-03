@@ -143,6 +143,69 @@ export function trackFetch(lifeCycle: LifeCycle, configuration: RumConfiguration
   return { stop: () => subscription.unsubscribe() }
 }
 
+export function trackCustom(lifeCycle: LifeCycle, configuration: RumConfiguration, tracer: Tracer) {
+  const subscription = initFetchObservable().subscribe((rawContext) => {
+    const context = rawContext as RumFetchCompleteContext | RumFetchStartContext
+    if (!isAllowedRequestUrl(configuration, context.url)) {
+      return
+    }
+
+    switch (context.state) {
+      case 'start':
+        tracer.traceFetch(context)
+        context.requestIndex = getNextRequestIndex()
+
+        lifeCycle.notify(LifeCycleEventType.REQUEST_STARTED, {
+          requestIndex: context.requestIndex,
+          url: context.url,
+        })
+        break
+      case 'complete':
+        tracer.clearTracingIfNeeded(context)
+
+        lifeCycle.notify(LifeCycleEventType.REQUEST_COMPLETED, {
+          duration: context.duration,
+          method: context.method,
+          requestIndex: context.requestIndex,
+          responseType: context.responseType,
+          spanId: context.spanId,
+          startClocks: context.startClocks,
+          status: context.status,
+          traceId: context.traceId,
+          traceSampled: context.traceSampled,
+          type: RequestType.FETCH,
+          url: context.url,
+          response: context.response,
+          init: context.init,
+          input: context.input,
+        })
+        break
+    }
+  })
+  return {
+    complete: () => {
+      tracer.clearTracingIfNeeded(context)
+
+      lifeCycle.notify(LifeCycleEventType.REQUEST_COMPLETED, {
+        duration: context.duration,
+        method: context.method,
+        requestIndex: context.requestIndex,
+        responseType: context.responseType,
+        spanId: context.spanId,
+        startClocks: context.startClocks,
+        status: context.status,
+        traceId: context.traceId,
+        traceSampled: context.traceSampled,
+        type: RequestType.FETCH,
+        url: context.url,
+        response: context.response,
+        init: context.init,
+        input: context.input,
+      })
+    },
+  }
+}
+
 function getNextRequestIndex() {
   const result = nextRequestIndex
   nextRequestIndex += 1
