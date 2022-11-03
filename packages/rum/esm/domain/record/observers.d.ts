@@ -1,0 +1,42 @@
+import type { DefaultPrivacyLevel } from '@datadog/browser-core';
+import type { LifeCycle, RumConfiguration } from '@datadog/browser-rum-core';
+import type { InputState, MousePosition, BrowserMutationPayload, ScrollPosition, StyleSheetRule, ViewportResizeDimension, MediaInteraction, FocusRecord, VisualViewportRecord, FrustrationRecord, BrowserIncrementalSnapshotRecord } from '../../types';
+import { IncrementalSource } from '../../types';
+import type { MutationController } from './mutationObserver';
+import type { ElementsScrollPositions } from './elementsScrollPositions';
+declare type ListenerHandler = () => void;
+declare type MousemoveCallBack = (p: MousePosition[], source: typeof IncrementalSource.MouseMove | typeof IncrementalSource.TouchMove) => void;
+export declare type MutationCallBack = (m: BrowserMutationPayload) => void;
+declare type MouseInteractionCallBack = (record: BrowserIncrementalSnapshotRecord) => void;
+declare type ScrollCallback = (p: ScrollPosition) => void;
+export declare type StyleSheetCallback = (s: StyleSheetRule) => void;
+declare type ViewportResizeCallback = (d: ViewportResizeDimension) => void;
+export declare type InputCallback = (v: InputState & {
+    id: number;
+}) => void;
+declare type MediaInteractionCallback = (p: MediaInteraction) => void;
+declare type FocusCallback = (data: FocusRecord['data']) => void;
+declare type VisualViewportResizeCallback = (data: VisualViewportRecord['data']) => void;
+export declare type FrustrationCallback = (record: FrustrationRecord) => void;
+interface ObserverParam {
+    lifeCycle: LifeCycle;
+    configuration: RumConfiguration;
+    mutationController: MutationController;
+    elementsScrollPositions: ElementsScrollPositions;
+    mutationCb: MutationCallBack;
+    mousemoveCb: MousemoveCallBack;
+    mouseInteractionCb: MouseInteractionCallBack;
+    scrollCb: ScrollCallback;
+    viewportResizeCb: ViewportResizeCallback;
+    visualViewportResizeCb: VisualViewportResizeCallback;
+    inputCb: InputCallback;
+    mediaInteractionCb: MediaInteractionCallback;
+    styleSheetCb: StyleSheetCallback;
+    focusCb: FocusCallback;
+    frustrationCb: FrustrationCallback;
+}
+export declare function initObservers(o: ObserverParam): ListenerHandler;
+export declare function initInputObserver(cb: InputCallback, defaultPrivacyLevel: DefaultPrivacyLevel): ListenerHandler;
+export declare function initStyleSheetObserver(cb: StyleSheetCallback): ListenerHandler;
+export declare function initFrustrationObserver(lifeCycle: LifeCycle, frustrationCb: FrustrationCallback): ListenerHandler;
+export {};

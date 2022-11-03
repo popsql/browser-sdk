@@ -1,0 +1,10 @@
+export declare type ElementsScrollPositions = ReturnType<typeof createElementsScrollPositions>;
+export declare type ScrollPositions = {
+    scrollLeft: number;
+    scrollTop: number;
+};
+export declare function createElementsScrollPositions(): {
+    set(element: Element | Document, scrollPositions: ScrollPositions): void;
+    get(element: Element): ScrollPositions | undefined;
+    has(element: Element): boolean;
+};
