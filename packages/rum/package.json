@@ -12,8 +12,8 @@
     "build:esm": "rm -rf esm && tsc -p tsconfig.esm.json"
   },
   "dependencies": {
-    "@datadog/browser-core": "4.23.2",
-    "@datadog/browser-rum-core": "4.23.2"
+    "@datadog/browser-core": "https://github.com/popsql/browser-sdk/releases/download/0.0.4/datadog-browser-core-4.23.2.tgz",
+    "@datadog/browser-rum-core": "https://github.com/popsql/browser-sdk/releases/download/0.0.6/datadog-browser-rum-core-4.23.2.tgz"
   },
   "peerDependencies": {
     "@datadog/browser-logs": "4.23.2"

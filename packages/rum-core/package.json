@@ -12,7 +12,7 @@
     "replace-build-env": "node ../../scripts/replace-build-env.js"
   },
   "dependencies": {
-    "@datadog/browser-core": "4.23.2"
+    "@datadog/browser-core": "https://github.com/popsql/browser-sdk/releases/download/0.0.4/datadog-browser-core-4.23.2.tgz"
   },
   "devDependencies": {
     "ajv": "6.12.6"
